@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.minesweeper.bl.GameBusinessLogic;
 import com.minesweeper.request.NewGameRequest;
+import com.minesweeper.request.TagCellRequest;
 
 @RestController
 @RequestMapping("/game")
@@ -50,21 +51,21 @@ public class GameController extends BaseController {
 		}
 	}
 
-	@PostMapping("/{id}/cell//{row}/{column}/select")
-	public ResponseEntity<Object> selectCell(@PathVariable(name = "id") Long id,
-			@PathVariable(name = "row") Integer row, @PathVariable(name = "column") Integer column) {
+	@PostMapping("/{id}/cell//{row}/{column}/tag")
+	public ResponseEntity<Object> tagCell(@PathVariable(name = "id") Long id, @PathVariable(name = "row") Integer row,
+			@PathVariable(name = "column") Integer column, @Valid @RequestBody TagCellRequest request) {
 		try {
-			return ResponseEntity.ok(gameBusinessLogic.selectCell(id, row, column));
+			return ResponseEntity.ok(gameBusinessLogic.tagCell(id, row, column, request));
 		} catch (Exception e) {
 			return processException(e);
 		}
 	}
 
-	@DeleteMapping("/{id}/cell/{row}/{column}/select")
+	@DeleteMapping("/{id}/cell/{row}/{column}/tag")
 	public ResponseEntity<Object> unselectCell(@PathVariable(name = "id") Long id,
 			@PathVariable(name = "row") Integer row, @PathVariable(name = "column") Integer column) {
 		try {
-			return ResponseEntity.ok(gameBusinessLogic.unselectCell(id, row, column));
+			return ResponseEntity.ok(gameBusinessLogic.untagCell(id, row, column));
 		} catch (Exception e) {
 			return processException(e);
 		}
