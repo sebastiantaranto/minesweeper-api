@@ -13,23 +13,24 @@ import com.minesweeper.serializer.JsonDateSerializer;
 @JsonInclude(Include.NON_NULL)
 public class GameResponse {
 
-	private Long id;
+	private int columns;
 	@JsonSerialize(using = JsonDateSerializer.class, include = JsonSerialize.Inclusion.NON_NULL)
 	private Date created;
+	private GameData data;
+	private Long id;
 	@JsonSerialize(using = JsonDateSerializer.class, include = JsonSerialize.Inclusion.NON_NULL)
 	private Date modified;
-	private int columns;
 	private int mines;
 	private int rows;
 	private GameStatus status;
-	private GameData data;
+	private Long timeSpent;
 
-	public Long getId() {
-		return id;
+	public int getColumns() {
+		return columns;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setColumns(int columns) {
+		this.columns = columns;
 	}
 
 	public Date getCreated() {
@@ -40,20 +41,28 @@ public class GameResponse {
 		this.created = created;
 	}
 
+	public GameData getData() {
+		return data;
+	}
+
+	public void setData(GameData data) {
+		this.data = data;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Date getModified() {
 		return modified;
 	}
 
 	public void setModified(Date modified) {
 		this.modified = modified;
-	}
-
-	public int getColumns() {
-		return columns;
-	}
-
-	public void setColumns(int columns) {
-		this.columns = columns;
 	}
 
 	public int getMines() {
@@ -80,12 +89,12 @@ public class GameResponse {
 		this.status = status;
 	}
 
-	public GameData getData() {
-		return data;
+	public Long getTimeSpent() {
+		return timeSpent;
 	}
 
-	public void setData(GameData data) {
-		this.data = data;
+	public void setTimeSpent(Long timeSpent) {
+		this.timeSpent = timeSpent;
 	}
 
 }

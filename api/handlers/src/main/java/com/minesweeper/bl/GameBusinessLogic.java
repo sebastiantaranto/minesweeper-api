@@ -60,7 +60,7 @@ public class GameBusinessLogic {
 	}
 
 	@Transactional
-	public Object checkCell(Long id, Integer row, Integer column) {
+	public GameResponse checkCell(Long id, Integer row, Integer column) {
 		Game entity = gameRepository.findById(id).orElseThrow(() -> new EntityNotFound());
 
 		validateCellAndGame(row, column, entity);
@@ -68,19 +68,26 @@ public class GameBusinessLogic {
 		GameData gameData = GAME_DATA_CONVERTER.apply(entity.getData());
 		gameDataService.checkCell(entity, gameData, row, column);
 
+		calculateSpentTime(entity);
 		gameDao.updateGameData(entity, gameData);
 		return GAME_ENTITY_CONVERTER.apply(entity);
 	}
 
-	public Object untagCell(Long id, Integer row, Integer column) {
+	@Transactional
+	public GameResponse untagCell(Long id, Integer row, Integer column) {
+		Game entity = gameRepository.findById(id).orElseThrow(() -> new EntityNotFound());
+		validateCellAndGame(row, column, entity);
 
-		return null;
+		GameData gameData = GAME_DATA_CONVERTER.apply(entity.getData());
+		gameDataService.untagCell(gameData, row, column);
+
+		gameDao.updateGameData(entity, gameData);
+		return GAME_ENTITY_CONVERTER.apply(entity);
 	}
 
 	@Transactional
-	public Object tagCell(Long id, Integer row, Integer column, TagCellRequest request) {
+	public GameResponse tagCell(Long id, Integer row, Integer column, TagCellRequest request) {
 		Game entity = gameRepository.findById(id).orElseThrow(() -> new EntityNotFound());
-
 		validateCellAndGame(row, column, entity);
 
 		if (!request.getTag().equals(Cell.FLAG_CELL) && !request.getTag().equals(Cell.QUESTION_CELL)) {
@@ -96,18 +103,26 @@ public class GameBusinessLogic {
 	}
 
 	@Transactional
-	public Object quitGame(Long id) {
+	public GameResponse quitGame(Long id) {
 		Game entity = gameRepository.findById(id).orElseThrow(() -> new EntityNotFound());
 		entity.setStatus(GameStatus.QUITTED);
 		entity.setModified(new Date());
+		calculateSpentTime(entity);
 		gameRepository.save(entity);
 		return GAME_ENTITY_CONVERTER.apply(entity);
 	}
 
 	@Transactional(readOnly = true)
-	public Object getGameById(Long id) {
+	public GameResponse getGameById(Long id) {
 		Game entity = gameRepository.findById(id).orElseThrow(() -> new EntityNotFound());
 		return GAME_ENTITY_CONVERTER.apply(entity);
+	}
+
+	private void calculateSpentTime(Game game) {
+		if (!game.getStatus().equals(GameStatus.ACTIVE)) {
+			Date now = new Date();
+			game.setTimeSpent(now.getTime() - game.getCreated().getTime());
+		}
 	}
 
 	private void validateCellAndGame(Integer row, Integer column, Game entity) {
@@ -118,10 +133,19 @@ public class GameBusinessLogic {
 		if (row > entity.getRows() || row < 0) {
 			throw new BadRequestException("Invalid row number. Please use a number between 0 and " + entity.getRows());
 		}
+
 		if (column > entity.getColumns() || column < 0) {
 			throw new BadRequestException(
 					"Invalid column number. Please use a number between 0 and " + entity.getColumns());
 		}
+	}
+
+	public void setGameDao(GameDao gameDao) {
+		this.gameDao = gameDao;
+	}
+
+	public void setGameDataService(GameDataService gameDataService) {
+		this.gameDataService = gameDataService;
 	}
 
 }

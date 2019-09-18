@@ -27,14 +27,13 @@ public class Game extends BaseEntity {
 	private String data;
 
 	@Column(name = "time_spent")
-	private Integer timeSpent;
+	private Long timeSpent;
 
-
-	public Integer getTimeSpent() {
+	public Long getTimeSpent() {
 		return timeSpent;
 	}
 
-	public void setTimeSpent(Integer timeSpent) {
+	public void setTimeSpent(Long timeSpent) {
 		this.timeSpent = timeSpent;
 	}
 

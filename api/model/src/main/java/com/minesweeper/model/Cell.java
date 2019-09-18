@@ -46,4 +46,8 @@ public class Cell {
 		return (this.status == null || this.status.equals(QUESTION_CELL) || this.status.equals(FLAG_CELL));
 	}
 
+	public boolean canBeTagged() {
+		return (this.status.equals(QUESTION_CELL) || this.status.equals(FLAG_CELL) || this.status.equals(UNKNOWN_CELL));
+	}
+
 }

@@ -13,6 +13,6 @@ CREATE TABLE `game` (
   `game_columns` INTEGER NOT NULL,
   `mines` INTEGER NOT NULL,
   `data` MEDIUMTEXT NOT NULL,
-  `time_spent` INT(20)
+  `time_spent` BIGINT(20)
   PRIMARY KEY (`id`)
 );

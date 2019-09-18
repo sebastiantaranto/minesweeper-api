@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @JsonInclude(Include.NON_NULL)
 public class ErrorResponse {
 
-	private String message;
-	private String field;
 	private Integer code;
+	private String field;
+	private String message;
 
 	public Integer getCode() {
 		return code;
@@ -16,6 +16,14 @@ public class ErrorResponse {
 
 	public void setCode(Integer code) {
 		this.code = code;
+	}
+
+	public String getField() {
+		return field;
+	}
+
+	public void setField(String field) {
+		this.field = field;
 	}
 
 	public String getMessage() {
@@ -26,11 +34,4 @@ public class ErrorResponse {
 		this.message = message;
 	}
 
-	public String getField() {
-		return field;
-	}
-
-	public void setField(String field) {
-		this.field = field;
-	}
 }

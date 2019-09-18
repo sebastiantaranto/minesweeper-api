@@ -15,18 +15,20 @@ public class GameEntityToGameResponse implements Function<Game, GameResponse> {
 		GameResponse rsp = new GameResponse();
 		rsp.setColumns(input.getColumns());
 		rsp.setCreated(input.getCreated());
-
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			rsp.setData(mapper.readValue(input.getData(), GameData.class));
-		} catch (Exception e) {
-			throw new InternalServerErrorException("An error ocurred trying to parse the game data.");
+		if (input.getData() != null) {
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				rsp.setData(mapper.readValue(input.getData(), GameData.class));
+			} catch (Exception e) {
+				throw new InternalServerErrorException("An error ocurred trying to parse the game data.");
+			}
 		}
 		rsp.setId(input.getId());
 		rsp.setMines(input.getMines());
 		rsp.setModified(input.getModified());
 		rsp.setRows(input.getRows());
 		rsp.setStatus(input.getStatus());
+		rsp.setTimeSpent(input.getTimeSpent());
 		return rsp;
 	}
 
