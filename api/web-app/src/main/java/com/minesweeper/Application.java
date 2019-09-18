@@ -17,7 +17,6 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-
 	@Bean
 	public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerFactoryCustomizer() {
 		return factory -> factory.setContextPath(Constants.DEFAULT_PATH);
