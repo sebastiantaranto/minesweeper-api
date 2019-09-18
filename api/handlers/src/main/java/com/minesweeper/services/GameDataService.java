@@ -18,7 +18,7 @@ public class GameDataService {
 		GameData data = new GameData();
 		Cell[][] cells = new Cell[rows][columns];
 
-		for (int i = 0; i < columns; i++) {
+		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				Cell newCell = new Cell();
 				newCell.setMine(false);
@@ -29,10 +29,10 @@ public class GameDataService {
 
 		data.setCells(cells);
 
-		Random rand = new Random();
+		Random random = new Random();
 		for (int i = 0; i < mines;) {
-			int randomRow = rand.nextInt(rows);
-			int randomColumn = rand.nextInt(columns);
+			int randomRow = random.nextInt(rows);
+			int randomColumn = random.nextInt(columns);
 
 			Cell randomCell = cells[randomRow][randomColumn];
 			if (!randomCell.isMine()) {
@@ -65,13 +65,21 @@ public class GameDataService {
 			if (numberOfMines > 0) {
 				requestedCell.setStatus(Cell.KNOWN_CELL);
 				requestedCell.setValue(numberOfMines);
+				gameData.setDiscoveredCells(gameData.getDiscoveredCells() + 1);
 			} else {
 				discoverEmptyCells(game, gameData, row, column);
 				requestedCell.setStatus(Cell.UNKNOWN_CELL);
 			}
-
 		}
 
+		checkIfGameWasWon(game, gameData);
+	}
+
+	private void checkIfGameWasWon(Game game, GameData gameData) {
+		int totalCells = game.getRows() * game.getColumns();
+		if (gameData.getDiscoveredCells() + game.getMines() == totalCells) {
+			game.setStatus(GameStatus.WON);
+		}
 	}
 
 	private void discoverEmptyCells(Game game, GameData gameData, Integer row, Integer column) {
@@ -81,6 +89,7 @@ public class GameDataService {
 				int numberOfMines = countMinesAround(game, gameData, row, column);
 				if (numberOfMines == 0) {
 					requestedCell.setStatus(Cell.EMPTY_CELL);
+					gameData.setDiscoveredCells(gameData.getDiscoveredCells() + 1);
 					discoverEmptyCells(game, gameData, row, column + 1);
 					discoverEmptyCells(game, gameData, row, column - 1);
 					discoverEmptyCells(game, gameData, row - 1, column + 1);

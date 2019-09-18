@@ -7,6 +7,15 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class GameData {
 
 	private Cell[][] cells;
+	private int discoveredCells;
+
+	public int getDiscoveredCells() {
+		return discoveredCells;
+	}
+
+	public void setDiscoveredCells(int discoveredCells) {
+		this.discoveredCells = discoveredCells;
+	}
 
 	public Cell[][] getCells() {
 		return cells;
