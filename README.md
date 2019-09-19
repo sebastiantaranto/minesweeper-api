@@ -31,7 +31,7 @@ java -Dspring.datasource.url=jdbc:mysql://{{database_endpoint}}:{{database_port}
 
 ## Notes
 
-The project was coded for a specific task so it was develop in just a few hours. The following list were the required task prioritized from most important to least important.
+The project was coded for a specific task so it was developed in just a few hours. The following list were the required task prioritized from most important to least important.
 
 * [x] Design and implement  a documented RESTful API for the game (think of a mobile app for your API)
 * [x] Implement an API client library for the API designed above. Ideally, in a different language, of your preference, to the one used for the API
@@ -44,4 +44,4 @@ The project was coded for a specific task so it was develop in just a few hours.
 * [x] Ability to select the game parameters: number of rows, columns, and mines
 * [] Ability to support multiple users/accounts
 
-The ability to support multiple user/accounts could not be developed in the given time but the idea was to create a account service which allows people to register and it will return a [JWT](https://jwt.io) that has to be send as a 'Authorization' header in every request. Then a filter will check it int every call and it will only give you access to the resources that you own.
+The ability to support multiple user/accounts could not be developed in the given time but the idea was to create a account service which allows people to register and it will return a [JWT](https://jwt.io) that has to be send as a 'Authorization' header in every request. Then a filter will check it in every call and it will only give you access to the resources that you own.
