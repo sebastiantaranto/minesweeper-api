@@ -1,0 +1,290 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Minesweeper API"
+  contact:
+    email: "sebastiantaranto@hotmail.com"
+host: "minesweeper.us-east-2.elasticbeanstalk.com"
+basePath: "/api/v1"
+schemes:
+- "http"
+paths:
+  /game:
+    post:
+      tags:
+      - "game"
+      description: "Create a new game"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/NewGameRequest"
+      responses:
+        201:
+          description: "Game created"
+        404:
+          description: "Invalid rows, columns or mine"
+    get:
+      tags:
+      - "game"
+      description: "Get all the games"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Game"
+  /game/{gameId}:
+    get:
+      tags:
+      - "game"
+      description: "Get a game by id"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "gameId"
+        in: "path"
+        description: "ID of game to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Game"
+        404:
+          description: "Game not found"
+    delete:
+      tags:
+      - "game"
+      description: "Finish a game by ID"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "gameId"
+        in: "path"
+        description: "ID of game to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        204:
+          description: "successful operation"
+        404:
+          description: "Game not found"
+  /game/{gameId}/cell/{row}/{column}/tag:
+    post:
+      tags:
+      - "game"
+      description: "Add a flag or question  tag to a cell"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "gameId"
+        in: "path"
+        description: "ID of game to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "row"
+        in: "path"
+        description: "row of the cell to process"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "column"
+        in: "path"
+        description: "column of the cell to process"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/TagRequest"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Game"
+    delete:
+      tags:
+      - "game"
+      description: "Remove a tag from a cell"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "gameId"
+        in: "path"
+        description: "ID of game to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "row"
+        in: "path"
+        description: "row of the cell to process"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "column"
+        in: "path"
+        description: "column of the cell to process"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Game"
+  /game/{gameId}/cell/{row}/{column}/check:
+    post:
+      tags:
+      - "game"
+      description: "Check a cell"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "gameId"
+        in: "path"
+        description: "ID of game to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "row"
+        in: "path"
+        description: "row of the cell to process"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "column"
+        in: "path"
+        description: "column of the cell to process"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "object"
+            additionalProperties:
+              type: "integer"
+              format: "int32"
+definitions:
+  TagRequest:
+    type: "object"
+    required:
+    - "tag"
+    properties:
+      tag:
+        type: "string"
+        enum:
+        - "Q"
+        - "F"
+        description: >
+          Values:
+           * `Q` - Add a question tag to the cell
+           * `F` - Add a flag to the cell
+  NewGameRequest:
+    type: "object"
+    required:
+    - "columns"
+    - "mines"
+    - "rows"
+    properties:
+      columns:
+        type: "integer"
+        format: "int32"
+        minimum: 3
+        maximum: 30
+      mines:
+        type: "integer"
+        format: "int32"
+        minimum: 3
+        maximum: 30
+      rows:
+        type: "integer"
+        format: "int32"
+        minimum: 1
+  Game:
+      type: "object"
+      properties:
+        columns:
+          type: "integer"
+          format: "int32"
+        mines:
+          type: "integer"
+          format: "int32"
+        rows:
+          type: "integer"
+          format: "int32"
+        id:
+          type: "integer"
+          format: "int64"
+        timeSpent:
+          type: "integer"
+          format: "int64"
+        created:
+          type: "string"
+          format: "date-time"
+        modified:
+          type: "string"
+          format: "date-time"
+        data:
+          type: "object"
+          properties:
+            cells:
+              type: "array"
+              items:
+                type: array
+                items:
+                  properties:
+                    mine:
+                      type: boolean
+                      description: "True if the cell is mined"
+                    status:
+                      type: "string"
+                      enum:
+                      - "E"
+                      - "Q"
+                      - "F"
+                      - "U"
+                      - "K"
+                      description: >
+                        Values:
+                         * `E` - Discovered empty cell
+                         * `Q` - Question tag added to the cell
+                         * `F` - Red Flag added to the cell
+                         * `U` - Unknown cell. Not checked
+                         * `K` - Known/checked cell. 
+                    value:
+                      type: "integer"
+                      format: "int64"
+                      description: "Number of mines arount the cell"
+        status:
+          type: "string"
+          enum:
+          - "ACTIVE"
+          - "PAUSED"
+          - "WON"
+          - "LOST"
+          - "QUITTED"

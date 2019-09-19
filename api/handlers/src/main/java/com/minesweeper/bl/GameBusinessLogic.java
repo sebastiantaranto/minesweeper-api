@@ -1,11 +1,14 @@
 package com.minesweeper.bl;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.minesweeper.converters.GameDataJsonConverter;
 import com.minesweeper.converters.GameEntityToGameResponse;
 import com.minesweeper.dao.GameDao;
@@ -100,6 +103,12 @@ public class GameBusinessLogic {
 		gameDao.updateGameData(entity, gameData);
 		return GAME_ENTITY_CONVERTER.apply(entity);
 
+	}
+
+	@Transactional(readOnly = true)
+	public List<GameResponse> getAllGames() {
+		List<Game> games = gameRepository.findAll();
+		return Lists.newArrayList(Iterables.transform(games, GAME_ENTITY_CONVERTER));
 	}
 
 	@Transactional

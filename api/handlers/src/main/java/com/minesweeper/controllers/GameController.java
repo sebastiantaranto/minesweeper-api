@@ -33,6 +33,15 @@ public class GameController extends BaseController {
 		}
 	}
 
+	@GetMapping("")
+	public ResponseEntity<Object> getAllGames() {
+		try {
+			return ResponseEntity.ok(gameBusinessLogic.getAllGames());
+		} catch (Exception e) {
+			return processException(e);
+		}
+	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<Object> getGameById(@PathVariable(name = "id") Long id) {
 		try {
@@ -45,13 +54,14 @@ public class GameController extends BaseController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> quitGame(@PathVariable(name = "id") Long id) {
 		try {
-			return ResponseEntity.ok(gameBusinessLogic.quitGame(id));
+			gameBusinessLogic.quitGame(id);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			return processException(e);
 		}
 	}
 
-	@PostMapping("/{id}/cell//{row}/{column}/tag")
+	@PostMapping("/{id}/cell/{row}/{column}/tag")
 	public ResponseEntity<Object> tagCell(@PathVariable(name = "id") Long id, @PathVariable(name = "row") Integer row,
 			@PathVariable(name = "column") Integer column, @Valid @RequestBody TagCellRequest request) {
 		try {
