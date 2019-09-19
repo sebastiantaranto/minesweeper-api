@@ -21,8 +21,11 @@ The code is deployed in AWS for testing purpose.
 run 'mvn clean install' inside the api folder to run all the tests and generate the jar file.
 
 ## Run
-A JAR file will be generated inside the 'api\web-app\target' folder. Then run:
+Before running the app the DB tables has to be created. There is a 'initial.sql' file that will create the tables used for the app.
+After building the code a JAR file will be generated inside the 'api\web-app\target' folder. Then run:
 java -Dspring.datasource.url=jdbc:mysql://{{database_endpoint}}:{{database_port}}/{{schema}} -Dspring.datasource.username={{username}} -Dspring.datasource.password={{password}} -jar web-app-1.0.0.jar
+
+
 
 ### Prerequisites
  - [git](https://git-scm.com/downloads): **version >= 2** 
