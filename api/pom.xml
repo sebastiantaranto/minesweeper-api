@@ -24,6 +24,7 @@
 		<mysql-connector.version>8.0.12</mysql-connector.version>
 		<junit.version>4.12</junit.version>
 		<easymock.version>4.0.2</easymock.version>
+		<jackson-mapper.version>1.7.1</jackson-mapper.version>
 	</properties>
 
 	<modules>
@@ -101,6 +102,11 @@
 				<artifactId>easymock</artifactId>
 				<version>${easymock.version}</version>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<groupId>org.codehaus.jackson</groupId>
+				<version>${jackson-mapper.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
