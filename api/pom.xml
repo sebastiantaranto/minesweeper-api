@@ -22,7 +22,7 @@
 		<guava.version>26.0-jre</guava.version>
 		<jaxrs.version>3.2.6</jaxrs.version>
 		<mysql-connector.version>8.0.12</mysql-connector.version>
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<easymock.version>4.0.2</easymock.version>
 		<jackson-mapper.version>1.7.1</jackson-mapper.version>
 	</properties>
